@@ -12,8 +12,8 @@ def DFS(problem: Problem) -> list:
         node = frontier.pop(0)
         explored.append(node.state)
         for action in problem.actions[node.state]:
-            child: Node = Node(action, node)
+            child: Node = Node(problem.result(node.state, action), node)
             if (child.state not in explored and child.state not in [f.state for f in frontier]):
                 if (problem.goal_test(child.state)):
-                    return problem.get_solution(child)
+                    return problem.solution(child)
                 frontier.append(child)

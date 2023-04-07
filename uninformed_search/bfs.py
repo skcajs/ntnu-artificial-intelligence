@@ -1,5 +1,4 @@
 from utils import Problem, Node
-from itertools import permutations
 
 def BFS(problem: Problem) -> list:
     node: Node = problem.initial_state
