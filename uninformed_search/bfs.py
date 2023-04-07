@@ -1,4 +1,5 @@
 from utils import Problem, Node
+from itertools import permutations
 
 def BFS(problem: Problem) -> list:
     node: Node = problem.initial_state
@@ -17,3 +18,24 @@ def BFS(problem: Problem) -> list:
                 if (problem.goal_test(child.state)):
                     return problem.solution(child)
                 frontier.append(child)
+
+
+if __name__ == '__main__':
+
+    def result(state, action):
+        state_list = list(state)
+        a, b = state_list.index('0'), action
+        state_list[b], state_list[a] = state_list[a], state_list[b]
+        return ''.join(state_list)
+    
+    actions = {}
+    keys = {0: [1, 3], 1: [2,4,0], 2: [5,1], 3: [0,4], 4: [1,5,3], 5: [2,4]}
+
+    for perm in [''.join(map(str, p)) for p in permutations(range(6))]:
+        actions[perm] = keys[perm.index('0')]
+            
+    initial_state = Node('120345')
+    goal_state = Node('123450')
+    problem = Problem(initial_state, goal_state, actions, result)
+    
+    print(BFS(problem))
