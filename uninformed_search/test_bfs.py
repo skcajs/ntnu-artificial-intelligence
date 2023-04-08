@@ -1,19 +1,22 @@
 import unittest
 from itertools import permutations
-import bfs
+from bfs import BFS
+from utils import Problem, Node
 
 class TestBFS(unittest.TestCase):
     def test_that_a_simple_tree_search_returns_optimised_path(self):
         actions = {'A':['B', 'E'], 'B': ['C','A'], 'C': ['D', 'H', 'E', 'B'], 'D': ['C','J'], 'E':['A', 'C', 'F'], 'F': ['E', 'G'], 'G': ['F', 'H', 'I'], 'H': ['C', 'J', 'I', 'G'], 'J': ['D', 'H', 'I']}
-        initial_state = bfs.Node('A')
-        goal_state = bfs.Node('I')
-        problem = bfs.Problem(initial_state, goal_state, actions)
+        initial_state = Node('A')
+        goal_state = Node('I')
+        problem = Problem(initial_state, goal_state, actions)
 
-        actual = bfs.BFS(problem)
+        bfs = BFS(problem)
+        actual = bfs.search()
         expected = ['I', 'H', 'C', 'B', 'A']
         self.assertEqual(actual, expected)
 
-    def test_that_an__unsolvable_6_puzzle_returns_empty_list(self):
+
+    def test_that_an_unsolvable_6_puzzle_returns_empty_list(self):
         def result(state, action):
             state_list = list(state)
             a, b = state_list.index('0'), action
@@ -26,14 +29,15 @@ class TestBFS(unittest.TestCase):
         for perm in [''.join(map(str, p)) for p in permutations(range(6))]:
             actions[perm] = keys[perm.index('0')]
                 
-        initial_state = bfs.Node('320514')
-        goal_state = bfs.Node('123450')
-        problem = bfs.Problem(initial_state, goal_state, actions, result)
+        initial_state = Node('320514')
+        goal_state = Node('123450')
+        problem = Problem(initial_state, goal_state, actions, result)
 
-        actual = bfs.BFS(problem)
-
-        expected = []
+        bfs = BFS(problem)
+        actual = bfs.search()
+        expected = None
         self.assertEqual(actual, expected)
+
 
     def test_that_a_solvable_6_puzzle_returns_correct_result(self):
         def result(state, action):
@@ -48,14 +52,15 @@ class TestBFS(unittest.TestCase):
         for perm in [''.join(map(str, p)) for p in permutations(range(6))]:
             actions[perm] = keys[perm.index('0')]
                 
-        initial_state = bfs.Node('120345')
-        goal_state = bfs.Node('123450')
-        problem = bfs.Problem(initial_state, goal_state, actions, result)
+        initial_state = Node('120345')
+        goal_state = Node('123450')
+        problem = Problem(initial_state, goal_state, actions, result)
 
-        actual = bfs.BFS(problem)
-
+        bfs = BFS(problem)
+        actual = bfs.search()
         expected = ['123450', '123405', '123045', '023145', '203145', '230145', '235140', '235104', '205134', '025134', '125034', '125304', '125340', '120345']
         self.assertEqual(actual, expected)
+
 
     def test_that_the_8_puzzle_correctly_shows_correct_route(self):
         def result(state, action):
@@ -70,10 +75,11 @@ class TestBFS(unittest.TestCase):
         for perm in [''.join(map(str, p)) for p in permutations(range(9))]:
             actions[perm] = keys[perm.index('0')]
                 
-        initial_state = bfs.Node('123405678')
-        goal_state = bfs.Node('123456780')
-        problem = bfs.Problem(initial_state, goal_state, actions, result)
+        initial_state = Node('123405678')
+        goal_state = Node('123456780')
+        problem = Problem(initial_state, goal_state, actions, result)
 
-        actual = bfs.BFS(problem)
+        bfs = BFS(problem)
+        actual = bfs.search()
         expected = ['123456780', '123456708', '123456078', '123056478', '123506478', '123560478', '123568470', '123568407', '123508467', '123058467', '123458067', '123458607', '123458670', '123450678', '123405678']
         self.assertEqual(actual, expected)

@@ -1,5 +1,5 @@
 class Node:
-    def __init__(self, state: any, parent = None):
+    def __init__(self, state, parent = None):
         self.state = state
         self.parent = parent
 
@@ -15,7 +15,6 @@ class Problem:
         if(not self.__func):
             return action
         return self.__func(parent_state, action)
-
 
     def goal_test(self, state: any) -> bool:
         if (state == self.goal_state.state):
