@@ -2,7 +2,7 @@ from utils import Problem, Node
 
 class DFS:
 
-    def __init__(self, problem, depth: int = 50):
+    def __init__(self, problem: Problem, depth: int = 50):
         self.problem = problem
         self.depth = depth
 
@@ -29,10 +29,10 @@ class DFS:
 
 
 if __name__ == "__main__":
-    actions = {'A':['B', 'G'], 'B': ['C', 'A'], 'C': ['D', 'B'], 'D': ['E','C'], 'E':['F', 'D'], 'F': ['G', 'E'], 'G': ['F', 'A']}
+    actions = {'A':['G', 'B'], 'B': ['C'], 'C': ['D'], 'D': ['E', 'H'], 'E':['F'], 'F': [], 'G': []}
     initial_state = Node('A')
-    goal_state = Node('F')
+    goal_state = Node('H')
     problem = Problem(initial_state, goal_state, actions)
     dfs = DFS(problem)
 
-    print(dfs.search(10))
+    print(dfs.search())
