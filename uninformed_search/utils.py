@@ -1,7 +1,8 @@
 class Node:
-    def __init__(self, state, parent = None):
+    def __init__(self, state, parent = None, cost = 0):
         self.state = state
         self.parent = parent
+        self.cost = cost
 
 class Problem:
     def __init__(self, initial_state: Node, goal_state: Node, actions: dict, func = None):
