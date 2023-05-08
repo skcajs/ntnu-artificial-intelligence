@@ -6,11 +6,11 @@ class Node:
         self.h = h
 
 class Problem:
-    def __init__(self, initial_state: Node, goal_nodes: list, actions: dict, heuristics: dict = None, func = None):
+    def __init__(self, initial_state: Node, goal_nodes: list, actions: dict, heuristic = None, func = None):
         self.initial_state = initial_state
         self.goal_nodes = goal_nodes
         self.actions = actions
-        self.heuristics = heuristics
+        self.heuristic = heuristic
         self.__solution = []
         self.__func = func
 
