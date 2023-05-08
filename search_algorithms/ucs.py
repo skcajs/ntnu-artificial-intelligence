@@ -16,12 +16,12 @@ class UCS:
                 return self.problem.solution(node)
             explored.append(node.state)
             for action in self.problem.actions[node.state]:
-                child = Node(self.problem.result(node.state, action[0]), node, action[1] + node.cost)
+                child = Node(self.problem.result(node.state, action[0]), node, action[1] + node.g)
                 if (child.state not in explored and child.state not in [f.state for f in frontier]):
                     frontier.append(child)
-                elif (child.state in [f.state for f in frontier if f.cost > child.cost]):
+                elif (child.state in [f.state for f in frontier if f.g > child.g]):
                     frontier[next(i for i, x in enumerate(frontier) if x.state == child.state)] = child
-            frontier.sort(key=lambda x: x.cost)
+            frontier.sort(key=lambda x: x.g)
 
 if __name__ == "__main__":
     actions = {
