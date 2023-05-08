@@ -1,6 +1,6 @@
 from utils import Problem, Node
 
-class GBFS:
+class AST:
     def __init__(self, problem: Problem):
         self.problem = problem
     
@@ -8,21 +8,26 @@ class GBFS:
         node = self.problem.initial_state
         frontier = [node]
         explored = []
+        goals = []
         while True:
             if(len(frontier) == 0):
-                return []
-            if(self.problem.goal_test(node.state)):
-                return self.problem.solution(node)
+                if(len(goals) == 0):
+                    return []
+                return self.problem.solution(min(goals, key=lambda x: x.g))
             node = frontier.pop(0)
             explored.append(node.state)
             for action in self.problem.actions[node.state]:
                 child_state = self.problem.result(node.state, action[0])
-                child = Node(child_state, node, h=self.problem.heuristics[child_state])
+                child = Node(child_state, node, g=action[1] + node.g, h=self.problem.heuristics[child_state])
+                if(self.problem.goal_test(child.state) and child.state not in [goal.state for goal in goals]):
+                    goals.append(child)
+                elif (child.state in [goal.state for goal in goals if goal.g + goal.h > child.g + child.h]):
+                    goals[next(i for i, x in enumerate(goals) if x.state == child.state)] = child
                 if (child.state not in explored and child.state not in [f.state for f in frontier]):
                     frontier.append(child)
-                elif (child.state in [f.state for f in frontier if f.h > child.h]):
+                elif (child.state in [f.state for f in frontier if f.g + f.h > child.g + child.h]):
                     frontier[next(i for i, x in enumerate(frontier) if x.state == child.state)] = child
-            frontier.sort(key=lambda x: x.h)
+            frontier.sort(key=lambda x: x.g + x.h)
 
 if __name__ == "__main__":
     actions = {
@@ -52,6 +57,6 @@ if __name__ == "__main__":
     initial_state = Node('S', h=heuristics['S'])
     goal_nodes = [Node('G1'), Node('G2'), Node('G3')]
     problem = Problem(initial_state=initial_state, goal_nodes=goal_nodes, heuristics=heuristics, actions=actions)
-    gbfs = GBFS(problem)
+    ast = AST(problem)
 
-    print(gbfs.search())
+    print(ast.search())

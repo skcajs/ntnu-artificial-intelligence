@@ -1,5 +1,4 @@
 from utils import Problem, Node
-
 class UCS:
     def __init__(self, problem: Problem):
         self.problem = problem
@@ -8,15 +7,20 @@ class UCS:
         node = self.problem.initial_state
         frontier = [node]
         explored = []
+        goals = []
         while True:
             if(len(frontier) == 0):
-                return []
+                if(len(goals) == 0):
+                    return []
+                return self.problem.solution(min(goals, key=lambda x: x.g))
             node = frontier.pop(0)
-            if(self.problem.goal_test(node.state)):
-                return self.problem.solution(node)
             explored.append(node.state)
             for action in self.problem.actions[node.state]:
                 child = Node(self.problem.result(node.state, action[0]), node, action[1] + node.g)
+                if(self.problem.goal_test(child.state) and child.state not in [goal.state for goal in goals]):
+                    goals.append(child)
+                elif (child.state in [goal.state for goal in goals if goal.g > child.g]):
+                    goals[next(i for i, x in enumerate(goals) if x.state == child.state)] = child
                 if (child.state not in explored and child.state not in [f.state for f in frontier]):
                     frontier.append(child)
                 elif (child.state in [f.state for f in frontier if f.g > child.g]):
@@ -31,11 +35,14 @@ if __name__ == "__main__":
         'C': [['S', 6], ['G2', 5], ['F', 7]], 
         'D': [['S', 1], ['C', 2], ['E', 2]], 
         'E': [['G3', 7]], 
-        'F': [['D', 2], ['G3', 8]]
+        'F': [['D', 2], ['G3', 8]],
+        'G1': [],
+        'G2': [],
+        'G3': []
     }
     initial_state = Node('S')
-    goal_state = Node('G2')
-    problem = Problem(initial_state, goal_state, actions)
+    goal_nodes = [Node('G1'), Node('G2'), Node('G3')]
+    problem = Problem(initial_state, goal_nodes, actions)
     ucs = UCS(problem)
 
     print(ucs.search())

@@ -31,8 +31,8 @@ class DFS:
 if __name__ == "__main__":
     actions = {'A':['G', 'B'], 'B': ['C'], 'C': ['D'], 'D': ['E', 'H'], 'E':['F'], 'F': [], 'G': []}
     initial_state = Node('A')
-    goal_state = Node('H')
-    problem = Problem(initial_state, goal_state, actions)
+    goal_nodes = [Node('H')]
+    problem = Problem(initial_state, goal_nodes, actions)
     dfs = DFS(problem)
 
     print(dfs.search())
