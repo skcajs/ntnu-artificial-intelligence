@@ -2,9 +2,9 @@ from utils import Problem, Node
 from itertools import permutations
 
 class AST:
-    def __init__(self, problem: Problem, optimal=True):
+    def __init__(self, problem: Problem, exhaustive=True):
         self.problem = problem
-        self.optimal = optimal
+        self.exhaustive = exhaustive
     
     def search(self) -> list:
         node = self.problem.initial_state
@@ -22,7 +22,7 @@ class AST:
                 child_state = self.problem.result(node.state, action[0])
                 child = Node(child_state, node, g=action[1] + node.g, h=self.problem.heuristic(child_state))
                 if(self.problem.goal_test(child.state) and child.state not in [goal.state for goal in goals]):
-                    if(not self.optimal):
+                    if(not self.exhaustive):
                         return self.problem.solution(child)
                     goals.append(child)
                 elif (child.state in [goal.state for goal in goals if goal.g + goal.h > child.g + child.h]):
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     goal_nodes = [Node('123456780')]
 
     problem = Problem(initial_state=initial_state, goal_nodes=goal_nodes, actions=actions, heuristic=heuristic, func=result)
-    ast = AST(problem, optimal=False)
+    ast = AST(problem, exhaustive=False)
 
     res = ast.search()
     print(res)
