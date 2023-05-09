@@ -1,13 +1,12 @@
 from utils import Problem, Node
 from itertools import permutations
 
-class AST:
+class AStarSearch:
     def __init__(self, problem: Problem):
         self.problem = problem
     
     def search(self) -> list:
-        node = self.problem.initial_state
-        frontier = [node]
+        frontier = [self.problem.initial_state]
         explored = []
         while True:
             if(len(frontier) == 0):
@@ -55,15 +54,21 @@ if __name__ == "__main__":
         state = list(s)
         total = 0
         for i in range(9):
-            if (goal.index(str(i)) != state.index(str(i))):
-                total += 1
+            goal_column = goal.index(str(i))%3
+            state_column = state.index(str(i))%3
+            goal_row = int(goal.index(str(i))/3%3)
+            state_row = int(state.index(str(i))/3%3)
+            total += abs(goal_column-state_column)
+            total += abs(goal_row-state_row)
+            # if (goal.index(str(i)) != state.index(str(i))):
+            #     total += 1
         return total
     
-    initial_state = Node('743216508')
+    initial_state = Node('615732048')
     goal_nodes = [Node('123456780')]
 
-    problem = Problem(initial_state=initial_state, goal_nodes=goal_nodes, actions=actions, heuristic=heuristic, func=result)
-    ast = AST(problem)
+    problem = Problem(initial_state=initial_state, goal_nodes=goal_nodes, actions=actions, heuristic=heuristic, transition=result)
+    ast = AStarSearch(problem)
 
     res = ast.search()
     print(res)

@@ -1,5 +1,5 @@
 from utils import Problem, Node
-class UCS:
+class UniformCostSearch:
     def __init__(self, problem: Problem):
         self.problem = problem
 
@@ -38,6 +38,6 @@ if __name__ == "__main__":
     initial_state = Node('S')
     goal_nodes = [Node('G1'), Node('G2'), Node('G3')]
     problem = Problem(initial_state, goal_nodes, actions)
-    ucs = UCS(problem)
+    ucs = UniformCostSearch(problem)
 
     print(ucs.search())

@@ -33,6 +33,6 @@ if __name__ == "__main__":
     initial_state = Node('A')
     goal_nodes = [Node('H')]
     problem = Problem(initial_state, goal_nodes, actions)
-    dfs = DFS(problem)
+    dfs = DepthFirstSearch(problem)
 
     print(dfs.search())
