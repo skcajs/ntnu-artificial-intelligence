@@ -2,31 +2,23 @@ from utils import Problem, Node
 from itertools import permutations
 
 class AST:
-    def __init__(self, problem: Problem, exhaustive=True):
+    def __init__(self, problem: Problem):
         self.problem = problem
-        self.exhaustive = exhaustive
     
     def search(self) -> list:
         node = self.problem.initial_state
         frontier = [node]
         explored = []
-        goals = []
         while True:
             if(len(frontier) == 0):
-                if(len(goals) == 0):
-                    return []
-                return self.problem.solution(min(goals, key=lambda x: x.g))
+                return []
             node = frontier.pop(0)
+            if(self.problem.goal_test(node.state)):
+                return self.problem.solution(node)
             explored.append(node.state)
             for action in self.problem.actions[node.state]:
                 child_state = self.problem.result(node.state, action[0])
                 child = Node(child_state, node, g=action[1] + node.g, h=self.problem.heuristic(child_state))
-                if(self.problem.goal_test(child.state) and child.state not in [goal.state for goal in goals]):
-                    if(not self.exhaustive):
-                        return self.problem.solution(child)
-                    goals.append(child)
-                elif (child.state in [goal.state for goal in goals if goal.g + goal.h > child.g + child.h]):
-                    goals[next(i for i, x in enumerate(goals) if x.state == child.state)] = child
                 if (child.state not in explored and child.state not in [f.state for f in frontier]):
                     frontier.append(child)
                 elif (child.state in [f.state for f in frontier if f.g + f.h > child.g + child.h]):
@@ -71,7 +63,7 @@ if __name__ == "__main__":
     goal_nodes = [Node('123456780')]
 
     problem = Problem(initial_state=initial_state, goal_nodes=goal_nodes, actions=actions, heuristic=heuristic, func=result)
-    ast = AST(problem, exhaustive=False)
+    ast = AST(problem)
 
     res = ast.search()
     print(res)
@@ -84,7 +76,7 @@ if __name__ == "__main__":
 #         'B': [['A', 2], ['C', 1]], 
 #         'C': [['S', 6], ['G2', 5], ['F', 7]], 
 #         'D': [['S', 1], ['C', 2], ['E', 2]], 
-#         'E': [['G3', 7]], 
+#         'E': [['G3', 4]], 
 #         'F': [['D', 2], ['G3', 8]],
 #         'G1': [],
 #         'G2': [],
@@ -107,6 +99,6 @@ if __name__ == "__main__":
 #     initial_state = Node('S', h=heuristic('S'))
 #     goal_nodes = [Node('G1'), Node('G2'), Node('G3')]
 #     problem = Problem(initial_state=initial_state, goal_nodes=goal_nodes, actions=actions, heuristic=heuristic)
-#     ast = AST(problem, optimal=False)
+#     ast = AST(problem)
 
 #     print(ast.search())

@@ -1,6 +1,6 @@
 from utils import Problem, Node
 
-class DFS:
+class DepthFirstSearch:
 
     def __init__(self, problem: Problem, depth: int = 50):
         self.problem = problem

@@ -11,9 +11,9 @@ class GBFS:
         while True:
             if(len(frontier) == 0):
                 return []
+            node = frontier.pop(0)
             if(self.problem.goal_test(node.state)):
                 return self.problem.solution(node)
-            node = frontier.pop(0)
             explored.append(node.state)
             for action in self.problem.actions[node.state]:
                 child_state = self.problem.result(node.state, action[0])

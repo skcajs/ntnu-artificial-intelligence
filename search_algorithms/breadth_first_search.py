@@ -1,6 +1,6 @@
 from utils import Problem, Node
 
-class BFS:
+class BreadthFirstSearch:
     def __init__(self, problem: Problem):
         self.problem = problem
 
