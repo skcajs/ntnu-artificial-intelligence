@@ -3,9 +3,9 @@ class State:
         self.h = h
 
 class Problem:
-    def __init__(self, initial_sate: int, successors, heuristic):
+    def __init__(self, initial_sate: int, heuristic):
         self.initial_state = initial_sate
-        self.successors = successors
+
         self.heuristic = heuristic
     
     def next_state(self, state) -> int:
