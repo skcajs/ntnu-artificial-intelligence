@@ -8,23 +8,24 @@ class GeneticAlgorithm:
         self.fitness = fitness
     
     def start(self):
-        count = 50
+        count = 80
+        chance = 5
         while count > 0:
             self.__population_fitness()
             weights = self.__fitness()
             pop_weights = list(map(lambda x, y:(x,y), weights, self.population))
             population_2 = []
-            for _ in range(2*len(self.population)):
+            for _ in range(len(self.population)):
                 parent1, parent2 = self.__selection(pop_weights)
                 child = self.__reproduce(parent1, parent2)
-                if(random.randint(0, 100) < 10):
+                if(random.randint(0, 100) < chance):
                     child = self.__mutate(child)
                 population_2.append(child)
+            # population_2 = sorted(pop_weights, reverse=True)[:len(pop_weights/2)]
             for i in range(len(self.population)):
                 self.population[i] = population_2[i]
             count -= 1
-            # print({'i': count, 'population_fitness': self.__population_fitness()})
-            print('i ', count, ' population_fitness ', self.__population_fitness(), '\nbest_so_far\n', self.__fittest())
+            print('i: ', count, '\npopulation_fitness ', self.__population_fitness(), '\nbest_so_far: ', self.__fittest())
         return {'population_fitness': self.__population_fitness(), 'fittest': self.__fittest()}
 
     def __fittest(self):
@@ -34,8 +35,7 @@ class GeneticAlgorithm:
     def __fitness(self):
         return self.fitness(self.population)
     
-    def __selection(self, pop_weights):
-        k = 3
+    def __selection(self, pop_weights, k = 3):
         return max(random.choices(pop_weights, k=k))[1], max(random.choices(pop_weights, k=k))[1]
         
     def __reproduce(self, parent1: str, parent2: str):
@@ -98,20 +98,16 @@ if __name__ == "__main__":
             weights.append(weight/len(gene))
         return weights
     
-
-    
-
-    
     # quote = "I've seen things you people wouldn't believe. Attack ships on fire off the shoulder of Orion. I watched C-beams glitter in the dark near the Tannhauser gate. All those moments will be lost in time... like tears in rain... Time to die."
-    quote = "hello, i'm sam and I created this genetic algorithm"
-    # quote = string2bin(quote)
+    quote = "The aroma of freshly brewed coffee fills the air."
+    quote = string2bin(quote)
 
-    population = generate_population_char(10000, len(quote))
+    population = generate_population(3500, len(quote))
 
     ga=GeneticAlgorithm(population, fitness)
 
     result = ga.start()
 
     to_print = result['fittest'][0]
-    print(to_print)
-    # print(' '.join([to_print[i:i+8] for i in range(0, len(to_print), 8)]))
+    # print(to_print)
+    print(' '.join([to_print[i:i+8] for i in range(0, len(to_print), 8)]))
