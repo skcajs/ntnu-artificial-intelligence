@@ -4,7 +4,7 @@ from utils import string2bin, swap
 
 class GeneticAlgorithm:
     def __init__(self, population, fitness=None):
-        self.population = population
+        self.population = self.__init_population(population=population)
         self.fitness = fitness
     
     def start(self):
@@ -12,28 +12,27 @@ class GeneticAlgorithm:
         chance = 5
         while count > 0:
             self.__population_fitness()
-            weights = self.__fitness()
-            pop_weights = list(map(lambda x, y:(x,y), weights, self.population))
             population_2 = []
-            for _ in range(len(self.population)):
-                parent1, parent2 = self.__selection(pop_weights)
+            for _ in range(len(self.population)/2):
+                parent1, parent2 = self.__selection(self.population)
                 child = self.__reproduce(parent1, parent2)
                 if(random.randint(0, 100) < chance):
                     child = self.__mutate(child)
-                population_2.append(child)
-            # population_2 = sorted(pop_weights, reverse=True)[:len(pop_weights/2)]
-            for i in range(len(self.population)):
-                self.population[i] = population_2[i]
+                population_2.append(child)  
             count -= 1
             print('i: ', count, '\npopulation_fitness ', self.__population_fitness(), '\nbest_so_far: ', self.__fittest())
         return {'population_fitness': self.__population_fitness(), 'fittest': self.__fittest()}
+    
+    def __init_population(self, population):
+        weights = self.__fitness(population)
+        return list(map(lambda x, y:(x,y), weights, self.population))
 
     def __fittest(self):
-        weights = self.__fitness()
+        weights = [x[0] for x in self.population]
         return self.population[weights.index(max(weights))], max(weights)
 
-    def __fitness(self):
-        return self.fitness(self.population)
+    def __fitness(self, population):
+        return self.fitness([x[1] for x in population])
     
     def __selection(self, pop_weights, k = 3):
         return max(random.choices(pop_weights, k=k))[1], max(random.choices(pop_weights, k=k))[1]
