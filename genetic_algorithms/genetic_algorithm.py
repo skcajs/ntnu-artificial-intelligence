@@ -6,25 +6,23 @@ class GeneticAlgorithm:
     def __init__(self, population, fitness=None):
         self.population = population
         self.fitness = fitness
+        self.size = len(population)
     
     def start(self):
         count = 80
+        goes = 0
         chance = 5
         while count > 0:
+            selected_population = self.__selection()
             self.__population_fitness()
-            weights = self.__fitness()
-            pop_weights = list(map(lambda x, y:(x,y), weights, self.population))
-            population_2 = []
-            for _ in range(len(self.population)):
-                parent1, parent2 = self.__selection(pop_weights)
+            for _ in range(len(self.population)//2):
+                parent1, parent2 = self.__pairing(selected_population)
                 child = self.__reproduce(parent1, parent2)
                 if(random.randint(0, 100) < chance):
                     child = self.__mutate(child)
-                population_2.append(child)
-            # population_2 = sorted(pop_weights, reverse=True)[:len(pop_weights/2)]
-            for i in range(len(self.population)):
-                self.population[i] = population_2[i]
+                self.population.append(child)
             count -= 1
+            goes += 1
             print('i: ', count, '\npopulation_fitness ', self.__population_fitness(), '\nbest_so_far: ', self.__fittest())
         return {'population_fitness': self.__population_fitness(), 'fittest': self.__fittest()}
 
@@ -35,8 +33,16 @@ class GeneticAlgorithm:
     def __fitness(self):
         return self.fitness(self.population)
     
-    def __selection(self, pop_weights, k = 3):
-        return max(random.choices(pop_weights, k=k))[1], max(random.choices(pop_weights, k=k))[1]
+    def __selection(self):
+        weights = self.__fitness()
+        selected = sorted(list(map(lambda x, y:(x,y), weights, self.population)), reverse=True)[:self.size]
+        self.population.clear()
+        self.population = [x[1] for x in selected]
+        return selected
+        
+    
+    def __pairing(self, selected_population, k = 3):
+        return max(random.choices(selected_population, k=k))[1], max(random.choices(selected_population, k=k))[1]
         
     def __reproduce(self, parent1: str, parent2: str):
         n = len(parent1)
@@ -100,9 +106,9 @@ if __name__ == "__main__":
     
     # quote = "I've seen things you people wouldn't believe. Attack ships on fire off the shoulder of Orion. I watched C-beams glitter in the dark near the Tannhauser gate. All those moments will be lost in time... like tears in rain... Time to die."
     quote = "The aroma of freshly brewed coffee fills the air."
-    quote = string2bin(quote)
+    # quote = string2bin(quote)
 
-    population = generate_population(3500, len(quote))
+    population = generate_population_char(5000, len(quote))
 
     ga=GeneticAlgorithm(population, fitness)
 
