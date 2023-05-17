@@ -4,9 +4,10 @@ from utils import string2bin, swap
 import time
 
 class GeneticAlgorithm:
-    def __init__(self, population, fitness=None):
+    def __init__(self, population, fitness=None, config=None):
         self.population = population
         self.fitness = fitness
+        self.config = config # JSON
     
     def start(self):
         count = 100
@@ -61,6 +62,7 @@ class GeneticAlgorithm:
         return sum(weights)/len(weights)
 
 if __name__ == "__main__":
+    
     def generate_population(s: int, n:int):
         population = []
         for _ in range(s):
