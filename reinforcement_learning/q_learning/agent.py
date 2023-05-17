@@ -19,8 +19,16 @@ class Agent:
         self.q[obs, action] += self.alpha * (reward +  self.gamma * np.max(self.q[next_obs]) - self.q[obs, action])
     
     def decay_epsilon(self):
-        # self.epsilon = self.final_epsilon + (self.epsilon - self.final_epsilon) * np.exp(-self.epsilon_decay * episode)
         self.epsilon = max(self.final_epsilon, self.epsilon - self.epsilon_decay)
 
     def load_q_tables(self, location):
         self.q = np.loadtxt(location)
+
+    def write_q_table(self, location, x, episode, route):
+        with open(location, "a") as f:
+            f.write("\n\n")
+            f.write(f"Epsiode:  {episode}")
+            f.write("\n")
+            f.write(f"Route:  {route}")
+            f.write("\n")
+            np.savetxt(f, x)

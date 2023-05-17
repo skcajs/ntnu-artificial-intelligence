@@ -3,7 +3,7 @@ from agent import Agent
 
 import gym
 
-env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=True,render_mode="human")
+env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=True,render_mode="array")
 
 done = False
 observation, info = env.reset()
@@ -16,7 +16,7 @@ observation, reward, terminated, truncated, info = env.step(action)
 agent = Agent( env, initial_epsilon=0 )
 agent.load_q_tables('reinforcement_learning\q_learning\q.txt')
 
-for episode in range(30):
+for episode in range(200):
     obs, info = env.reset()
     done = False
 
@@ -36,7 +36,7 @@ for episode in range(30):
 # groups = [rewards[x:x+sample] for x in range(0, len(rewards), sample)]
 # means = [sum(group)/len(group) for group in groups]
 
-# print("Average Rewards: ", sum(means)/len(means))
+print("Average Rewards: ", sum(rewards)/len(rewards))
 
 plt.plot(rewards)
 plt.show()
