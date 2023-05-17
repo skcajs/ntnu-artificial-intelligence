@@ -1,6 +1,7 @@
 import random
 import string
 from utils import string2bin, swap
+import time
 
 class GeneticAlgorithm:
     def __init__(self, population, fitness=None):
@@ -8,8 +9,9 @@ class GeneticAlgorithm:
         self.fitness = fitness
     
     def start(self):
-        count = 80
-        chance = 5
+        count = 100
+        chance = 10
+        tic = time.perf_counter()
         while count > 0:
             self.__population_fitness()
             weights = self.__fitness()
@@ -21,12 +23,13 @@ class GeneticAlgorithm:
                 if(random.randint(0, 100) < chance):
                     child = self.__mutate(child)
                 population_2.append(child)
-            # population_2 = sorted(pop_weights, reverse=True)[:len(pop_weights/2)]
-            for i in range(len(self.population)):
-                self.population[i] = population_2[i]
+            self.population.clear()
+            self.population = population_2
             count -= 1
             print('i: ', count, '\npopulation_fitness ', self.__population_fitness(), '\nbest_so_far: ', self.__fittest())
-        return {'population_fitness': self.__population_fitness(), 'fittest': self.__fittest()}
+            if(self.__fittest()[1] == 1.0): break
+        toc = time.perf_counter()
+        return {'population_fitness': self.__population_fitness(), 'time_taken': f"{toc - tic:0.4f}", 'fittest': self.__fittest()}
 
     def __fittest(self):
         weights = self.__fitness()
@@ -44,7 +47,7 @@ class GeneticAlgorithm:
         return parent1[:c] + parent2[c:]
     
     def __mutate(self, child):
-        p = 1/len(child)*100
+        p = 0.4
         mutant = []
         for g in child:
             r = random.random()
@@ -73,7 +76,7 @@ if __name__ == "__main__":
         for _ in range(s):
             gene = []
             for _ in range(n):
-                k = random.choice(string.ascii_lowercase + string.digits + string.punctuation + ' ')
+                k = random.choice(string.ascii_letters + string.digits + string.punctuation + ' ')
                 gene.append(str(k))
             population.append(''.join(gene))
         return population
@@ -100,14 +103,16 @@ if __name__ == "__main__":
     
     # quote = "I've seen things you people wouldn't believe. Attack ships on fire off the shoulder of Orion. I watched C-beams glitter in the dark near the Tannhauser gate. All those moments will be lost in time... like tears in rain... Time to die."
     quote = "The aroma of freshly brewed coffee fills the air."
-    quote = string2bin(quote)
+    # quote = string2bin(quote)
 
-    population = generate_population(3500, len(quote))
+    population = generate_population_char(2500, len(quote))
 
     ga=GeneticAlgorithm(population, fitness)
 
     result = ga.start()
 
     to_print = result['fittest'][0]
-    # print(to_print)
-    print(' '.join([to_print[i:i+8] for i in range(0, len(to_print), 8)]))
+    print(to_print)
+    # print(' '.join([to_print[i:i+8] for i in range(0, len(to_print), 8)]))
+
+    print(result['time_taken'])
