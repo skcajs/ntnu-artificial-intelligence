@@ -21,8 +21,11 @@ class Agent:
     def decay_epsilon(self):
         self.epsilon = max(self.final_epsilon, self.epsilon - self.epsilon_decay)
 
-    def load_q_tables(self, location):
+    def load_q_table(self, location):
         self.q = np.loadtxt(location)
+
+    def save_q_table(self, location, x):
+        self.q = np.savetxt(location, x)
 
     def write_q_table(self, location, x, episode, route):
         with open(location, "a") as f:
