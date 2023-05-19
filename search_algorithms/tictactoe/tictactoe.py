@@ -1,9 +1,8 @@
-import random
+import math
 import pygame
 from pygame.locals import *
 
 pygame.init()
-
 
 screen_width = 300
 screen_height = 300
@@ -68,34 +67,65 @@ def check_winner():
     for x in markers:
         # check columns
         if sum(x) == 3:
-            winner = 1
+            winner = 'X'
             game_over = True
         if sum(x) == -3:
-            winner = 2
+            winner = 'O'
             game_over = True
         # check rows
         if markers[0][y_pos] + markers[1][y_pos] + markers[2][y_pos] == 3:
-            winner = 1
+            winner = 'X'
             game_over = True
         if markers[0][y_pos] + markers[1][y_pos] + markers[2][y_pos] == -3:
-            winner = 2
+            winner = 'O'
             game_over = True
         y_pos += 1
 
     # check cross
     if markers[0][0] + markers[1][1] + markers[2][2] == 3 or markers[2][0] + markers[1][1] + markers[0][2] == 3:
-        winner = 1
+        winner = 'X'
         game_over = True
     if markers[0][0] + markers[1][1] + markers[2][2] == -3 or markers[2][0] + markers[1][1] + markers[0][2] == -3:
-        winner = 2
+        winner = 'O'
         game_over = True
 
     if not any(0 in submarkers for submarkers in markers) and winner == 0:
+        winner = 'D'
         draw = True
         game_over = True
 
+def test_winner():
+    y_pos = 0
+    for x in markers:
+        # check columns
+        if sum(x) == 3:
+            return 'X'
+
+        if sum(x) == -3:
+            return 'O'
+
+        # check rows
+        if markers[0][y_pos] + markers[1][y_pos] + markers[2][y_pos] == 3:
+            return 'X'
+
+        if markers[0][y_pos] + markers[1][y_pos] + markers[2][y_pos] == -3:
+            return 'O'
+
+        y_pos += 1
+
+    # check cross
+    if markers[0][0] + markers[1][1] + markers[2][2] == 3 or markers[2][0] + markers[1][1] + markers[0][2] == 3:
+        return 'X'
+
+    if markers[0][0] + markers[1][1] + markers[2][2] == -3 or markers[2][0] + markers[1][1] + markers[0][2] == -3:
+        return 'O'
+
+    if not any(0 in submarkers for submarkers in markers) and winner == 0:
+        return 'D'
+
+
 def draw_winner(winner):
-    win_text = "Player " + str(winner) + "wins!"
+    win_text = "Player " + winner + " wins!"
     win_img = font.render(win_text, True, blue)
     pygame.draw.rect(screen, green, (screen_width // 2 - 100, screen_height // 2 - 60, 200, 50))
     screen.blit(win_img, (screen_width // 2 - 100, screen_height // 2 - 50))
@@ -115,7 +145,55 @@ def draw_draw():
     again_img = font.render(again_text, True, blue)
     pygame.draw.rect(screen, green, again_rect)
     screen.blit(again_img, (screen_width // 2 - 80, screen_height // 2 + 10))
- 
+
+def AI_move():
+    bestScore = - math.inf
+    bestMove = 0,0
+    for i in range(len(markers)):
+        for j in range(len(markers[i])):
+            if markers[i][j] == 0:
+                markers[i][j] = -1
+                score = minimax(markers, False)
+                markers[i][j] = 0
+                if score > bestScore:
+                    bestScore = score
+                    bestMove = i,j
+    return bestMove
+
+def minimax(markers, isMaximising):
+    test_win = test_winner()
+    if test_win == 'O':
+        return 1
+    elif test_win == 'X':
+        return -1
+    elif test_win == 'D':
+        return 0
+    
+    if isMaximising:
+        bestScore = - math.inf
+        for i in range(len(markers)):
+            for j in range(len(markers[i])):
+                if markers[i][j] == 0:
+                    markers[i][j] = -1
+                    score = minimax(markers, False)
+                    markers[i][j] = 0
+                    if score > bestScore:
+                        bestScore = score
+        return bestScore
+    else:
+        bestScore = math.inf
+        for i in range(len(markers)):
+            for j in range(len(markers[i])):
+                if markers[i][j] == 0:
+                    markers[i][j] = 1
+                    score = minimax(markers, True)
+                    markers[i][j] = 0
+                    if score < bestScore:
+                        bestScore = score
+        return bestScore
+
+
+
 run = True
 while run:
     
@@ -140,17 +218,10 @@ while run:
                         player *= -1
                         check_winner()
             else:
-                zeros = []
-                for i in range(len(markers)):
-                    for j in range(len(markers[i])):
-                        if markers[i][j] == 0:
-                            zeros.append((i,j))
-                ai_move = random.choice(zeros)
-                markers[ai_move[0]][ai_move[1]] = player
+                ai_x, ai_y = AI_move()
+                markers[ai_x][ai_y] = player
                 player *= -1
                 check_winner()
-                # get random position
-                # random.sample(markers, )
 
     if game_over:
         if (draw):
@@ -169,6 +240,7 @@ while run:
                 pos = []
                 player = 1
                 winner = 0
+                draw = False
                 game_over = False
                 for x in range(3):
                     row = [0] * 3

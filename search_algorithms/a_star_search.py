@@ -54,12 +54,14 @@ if __name__ == "__main__":
         state = list(s)
         total = 0
         for i in range(9):
+            # Manhatton Distance
             goal_column = goal.index(str(i))%3
             state_column = state.index(str(i))%3
             goal_row = int(goal.index(str(i))/3%3)
             state_row = int(state.index(str(i))/3%3)
             total += abs(goal_column-state_column)
             total += abs(goal_row-state_row)
+            # # Humming Distance
             # if (goal.index(str(i)) != state.index(str(i))):
             #     total += 1
         return total

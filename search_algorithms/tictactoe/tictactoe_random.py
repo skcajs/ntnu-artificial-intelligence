@@ -149,8 +149,6 @@ while run:
                 markers[ai_move[0]][ai_move[1]] = player
                 player *= -1
                 check_winner()
-                # get random position
-                # random.sample(markers, )
 
     if game_over:
         if (draw):
