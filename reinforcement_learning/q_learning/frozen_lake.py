@@ -31,11 +31,6 @@ for episode in range(200):
         if(done):
             rewards.append(reward)
 
-# sample = 100
-
-# groups = [rewards[x:x+sample] for x in range(0, len(rewards), sample)]
-# means = [sum(group)/len(group) for group in groups]
-
 print("Average Rewards: ", sum(rewards)/len(rewards))
 
 plt.plot(rewards)

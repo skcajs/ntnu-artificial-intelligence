@@ -4,7 +4,7 @@ import os
 mdp = TransportationMDP(N=10)
 
 def valueIteration(mdp: TransportationMDP):
-    V = {} # State -> Uopt[state]
+    V = {} # State -> Vopt[state]
     for state in mdp.states:
         V[state] = 0.
 

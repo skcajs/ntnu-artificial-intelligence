@@ -55,7 +55,7 @@ while run:
     draw_grid()
     draw_markers(i)
     
-    if toc - tic > 1000:
+    if toc - tic > 500:
         if (i == 0):
             run = False
         tic = toc

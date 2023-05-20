@@ -19,7 +19,7 @@ route = []
 
 def evaluation():
     episode_rewards = []
-    for _ in range(200):
+    for _ in range(20):
         obs, info = env.reset()
         done = False
 

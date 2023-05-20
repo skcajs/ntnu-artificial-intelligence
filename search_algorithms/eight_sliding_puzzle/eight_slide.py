@@ -64,18 +64,3 @@ def play():
     ast = AStarSearch(problem)
 
     return ast.search()
-
-
-board = play()
-
-board.reverse()
-
-boardpy = []
-
-for b in board:
-    bpy = np.array(list(b))
-    m = bpy.reshape(3,3)
-    boardpy.append(m)
-
-for bpy in boardpy:
-    print(bpy)

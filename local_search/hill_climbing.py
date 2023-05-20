@@ -9,7 +9,7 @@ class HillClimbing:
         current = self.problem.initial_state
         while True:
             neighbor = self.problem.next_state(current)
-            if self.problem.value(neighbor) <= self.problem.value(current):
+            if self.problem.value(neighbor) >= self.problem.value(current):
                 return current
             current = neighbor
             
