@@ -1,6 +1,6 @@
 import random
 import string
-from utils import string2bin, swap
+from utils import swap
 import time
 
 class GeneticAlgorithm:
