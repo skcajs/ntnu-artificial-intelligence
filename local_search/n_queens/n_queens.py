@@ -4,7 +4,7 @@ import random
 def create_board(n = 4):
     state = np.zeros(n**2).reshape(n,n)
     for i in state:
-        i[random.randint(0,3)] = 1
+        i[random.randint(0,n-1)] = 1
     return state
 
 def successors(state):
