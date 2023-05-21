@@ -9,7 +9,7 @@ import numpy as np
 
 pygame.init()
 
-n = 8
+n = 10
 board = create_board(n)
 
 problem = Problem(initial_state=board, f_heuristic=heuristic, f_successors=successors)
@@ -67,7 +67,7 @@ while run:
     draw_grid()
     draw_markers(i)
     
-    if toc - tic > 500:
+    if toc - tic >= 500:
         if (i == len(markers)-1):
             while True:
                 run = False
