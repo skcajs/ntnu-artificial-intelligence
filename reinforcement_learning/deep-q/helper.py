@@ -3,13 +3,13 @@ from IPython import display
 
 plt.ion()
 
-def plot(scores, mean_scores):
+def plot(scores, mean_scores, xlabel, ylabel, epsilon):
     display.clear_output(wait=True)
     display.display(plt.gcf())
     plt.clf()
-    plt.title('Training...')
-    plt.xlabel('Episode')
-    plt.ylabel('Score')
+    plt.title(f'Training... epsilon {"%.3f" % epsilon}')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.plot(scores)
     plt.plot(mean_scores)
     plt.ylim(ymin=0)
