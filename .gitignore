@@ -3,3 +3,5 @@ __pycache__
 .vscode
 
 mnist_784.*
+
+model
