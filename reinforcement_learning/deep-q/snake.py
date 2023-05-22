@@ -12,7 +12,7 @@ font = pygame.font.SysFont('arial', 25)
 # add rewards
 # play(action) -> next state
 # episode
-# is_collision
+# _is_collision
 
 class Direction(Enum):
     RIGHT = 1
@@ -82,7 +82,7 @@ class Snake:
         # 3. check if game over
         reward = 0
         game_over = False
-        if self.is_collision() or self.frame > 100*len(self.snake) :
+        if self._is_collision() or self.frame > 100*len(self.snake) :
             reward = -10
             game_over = True
             return reward, game_over, self.score
@@ -115,22 +115,22 @@ class Snake:
 
         state = [
             # Danger straight
-            (dir_r and self.is_collision(point_r)) or 
-            (dir_l and self.is_collision(point_l)) or 
-            (dir_u and self.is_collision(point_u)) or 
-            (dir_d and self.is_collision(point_d)),
+            (dir_r and self._is_collision(point_r)) or 
+            (dir_l and self._is_collision(point_l)) or 
+            (dir_u and self._is_collision(point_u)) or 
+            (dir_d and self._is_collision(point_d)),
 
             # Danger right
-            (dir_u and self.is_collision(point_r)) or 
-            (dir_d and self.is_collision(point_l)) or 
-            (dir_l and self.is_collision(point_u)) or 
-            (dir_r and self.is_collision(point_d)),
+            (dir_u and self._is_collision(point_r)) or 
+            (dir_d and self._is_collision(point_l)) or 
+            (dir_l and self._is_collision(point_u)) or 
+            (dir_r and self._is_collision(point_d)),
 
             # Danger left
-            (dir_d and self.is_collision(point_r)) or 
-            (dir_u and self.is_collision(point_l)) or 
-            (dir_r and self.is_collision(point_u)) or 
-            (dir_l and self.is_collision(point_d)),
+            (dir_d and self._is_collision(point_r)) or 
+            (dir_u and self._is_collision(point_l)) or 
+            (dir_r and self._is_collision(point_u)) or 
+            (dir_l and self._is_collision(point_d)),
             
             # Move direction
             dir_l,
@@ -146,7 +146,7 @@ class Snake:
             ]
         return np.array(state, dtype=int)
     
-    def is_collision(self, pt=None):
+    def _is_collision(self, pt=None):
         if pt is None:
             pt = self.head
         # hits boundary
