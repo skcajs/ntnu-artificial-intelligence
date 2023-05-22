@@ -1,5 +1,4 @@
 from MDP import TransportationMDP
-import os
 
 mdp = TransportationMDP(N=10)
 
@@ -34,9 +33,9 @@ def valueIteration(mdp: TransportationMDP):
                 pi[state] = max((Q(state, action), action) for action in mdp.actions(state))[1]
 
         # print
-        print('{:15} {:15} {:15}'.format('s', 'V(s)', 'pi(s)'))
+        print('{:3} {:3} {:3}'.format('s', 'V(s)', 'pi(s)'))
         for state in mdp.states:
-            print('{:15} {:15} {:15}'.format(state, V[state], pi[state]))
+            print('{:3} {:3} {:3}'.format(state, V[state], pi[state]))
         input()
 
 print(mdp.transition_and_reward(3, 'walk'))

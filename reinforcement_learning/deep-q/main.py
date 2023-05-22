@@ -7,7 +7,7 @@ if __name__ == '__main__':
     mean_scores = []
     total_score = 0
     record = 0
-    agent = Agent()
+    agent = Agent(initial_epsilon=0.4)
     game = Snake()
     while True:
         # get state
