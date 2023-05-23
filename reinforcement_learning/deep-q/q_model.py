@@ -35,7 +35,7 @@ class Linear_QNet(nn.Module):
 class QTrainer:
     def __init__(self, model, lr, gamma):
         self.model = model
-        self.lr = lr
+        self.lr = lr # learning rate
         self.gamma = gamma
         self.optimiser = optim.Adam(model.parameters(), lr=self.lr) # choose an optimiser, in this case Adam
         self.criterion = nn.MSELoss()

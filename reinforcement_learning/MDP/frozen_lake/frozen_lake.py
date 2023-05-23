@@ -51,9 +51,8 @@ while not done:
     action = policies[state]
     
     # Find the expected utility following each action and choose the best one.
+    print('current state: ', state, 'policy: ', action)
 
     state, reward, terminated, truncated, info = env.step(action)
-
-    print()  # Add some diagnostic output so that you can see your decision
 
     done = terminated or truncated
