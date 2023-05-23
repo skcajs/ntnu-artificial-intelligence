@@ -61,7 +61,7 @@ for episode in range(2000):
     agent.decay_epsilon()
     epsilons.append(agent.epsilon)
 
-agent.save_q_table(agent.q, "reinforcement_learning\q_learning\q.txt")
+agent.save_q_table("./reinforcement_learning/q_learning/q.txt", agent.q)
 
 top = rewards[1000:]
 print("Average Rewards: ", sum(top)/len(top))

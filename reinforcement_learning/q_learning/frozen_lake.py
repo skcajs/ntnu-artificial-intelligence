@@ -14,7 +14,7 @@ action = env.action_space.sample()
 observation, reward, terminated, truncated, info = env.step(action)
 
 agent = Agent( env, initial_epsilon=0 )
-agent.load_q_tables('reinforcement_learning\q_learning\q.txt')
+agent.load_q_table('./reinforcement_learning/q_learning/q.txt')
 
 for episode in range(200):
     obs, info = env.reset()

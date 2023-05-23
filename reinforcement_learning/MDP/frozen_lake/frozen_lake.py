@@ -9,44 +9,46 @@ iterations = 500
 
 mdp = env.P
 
-
-# utilities = [0.41,0.38,0.35,0.34,0.43,0,0.12,0,0.45,0.48,0.43,0,0,0.59,0.71,1]
 done = False
 
 
 def value_iteration(mdp):
     V = {}
-    for key, value in mdp.items():
-        V[key] = 0.
+    P = {}
+    for state in mdp.keys():
+        V[state] = 0.
 
     def Q(state, action):
         return sum((i[0] * (i[2] + alpha * V[i[1]]) for i in mdp[state][action]))
     
     for _ in range(iterations):
+        # Value iteration
         new_V = {}
-        for key, value in mdp.items():
-            if key == 15:
-                new_V[key] = 0.
+        for state, actions in mdp.items():
+            if state == 15:
+                new_V[state] = 0.
             else:
-                new_V[key] = max(Q(key, action) for action in value)
+                new_V[state] = max(Q(state, action) for action in actions)
 
         V = new_V
 
-        # Read policy
+        # Policy iteration
         pi = {}
-        for key, value in mdp.items():
-            if key == 15:
-                pi[key] = 'none'
+        for state, actions in mdp.items():
+            if state == 15:
+                pi[state] = None
             else:
-                pi[key] = max((Q(key, action), action) for action in value)[1]
+                pi[state] = max((Q(state, action), action) for action in actions)[1]
 
-    return [v for v in V.values()]
+        P = pi
 
-utilities = value_iteration(mdp)
+    return [p for p in P.values()]
+
+policies = value_iteration(mdp)
 
 while not done:
 
-    action = env.P[state]
+    action = policies[state]
     
     # Find the expected utility following each action and choose the best one.
 
